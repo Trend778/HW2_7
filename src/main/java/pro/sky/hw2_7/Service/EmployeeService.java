@@ -1,58 +1,59 @@
-package pro.sky.course2.collectionslistssets.Service;
+package pro.sky.hw2_7.Service;
 
-import pro.sky.course2.collectionslistssets.exception.EmployeeAlreadyAddedException;
-import pro.sky.course2.collectionslistssets.exception.EmployeeNotFoundException;
-import pro.sky.course2.collectionslistssets.exception.EmployeeStorageIsFullException;
-import pro.sky.course2.collectionslistssets.model.Employee;
 import org.springframework.stereotype.Service;
+import pro.sky.hw2_7.exception.EmployeeAlreadyAddedException;
+import pro.sky.hw2_7.exception.EmployeeNotFoundException;
+import pro.sky.hw2_7.exception.EmployeeStorageIsFullException;
+import pro.sky.hw2_7.model.Employee;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmployeeService {
 
     private static final int Limit = 10;
 
-    private final List<Employee> employees;
+    private final Map<String, Employee> employees = new HashMap<>();
 
-    public EmployeeService() {
-        this.employees = new ArrayList<>();
+    private String getKey (String name, String surname) {  //Возвращает ключ в виде имени фамилии
+        return name + " " + surname;
     }
-
-    public Employee addEmployee(String name, String surname) {
+    public Employee addEmployee(String name, String surname) { //Если ключ имеется, эксепшн, иначе вбиваем по ключу нового сотрудника
 
         Employee employee = new Employee(name, surname);
-        if (employees.contains(employee)) {
+        String key = getKey(name, surname);
+        if (employees.containsKey(key)) {
             throw new EmployeeAlreadyAddedException();
         }
         if (employees.size() < Limit) {
-            employees.add(employee);
+            employees.put(key, employee);
             return employee;
         }
         throw new EmployeeStorageIsFullException();
     }
 
-    public Employee findEmployee(String name, String surname) {
+    public Employee findEmployee(String name, String surname) { //Если ключа нет, эксепшн
 
-        Employee employee = new Employee(name, surname);
-        if (!employees.contains(employee)) {
+        String key = getKey(name, surname);
+        if (!employees.containsKey(key)) {
             throw new EmployeeNotFoundException();
         }
-        return employee;
+        return employees.get(key);
 
     }
 
-    public Employee removeEmployee(String name, String surname) {
-        Employee employee = new Employee(name, surname);
-        if (!employees.contains(employee)) {
+    public Employee removeEmployee(String name, String surname) {  //Если ключа нет, эксепшн
+        String key = getKey(name, surname);
+        if (!employees.containsKey(key)) {
             throw new EmployeeNotFoundException();
         }
-        employees.remove(employee);
-        return employee;
+        return employees.remove(key);
     }
 
     public List<Employee> getAll() {
-        return new ArrayList<>(employees);
+        return new ArrayList<>(employees.values());
     }
 }
