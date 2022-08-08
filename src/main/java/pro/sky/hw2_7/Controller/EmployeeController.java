@@ -1,4 +1,4 @@
-package pro.sky.hw2_7;
+package pro.sky.hw2_7.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,6 +8,7 @@ import pro.sky.hw2_7.Service.EmployeeService;
 import pro.sky.hw2_7.model.Employee;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employee")

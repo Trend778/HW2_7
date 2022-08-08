@@ -1,5 +1,7 @@
-package pro.sky.course2.collectionslistssets.model;
+package pro.sky.hw2_7.model;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class Employee {
